@@ -1,0 +1,60 @@
+images {
+   image: "images/entry.png" COMP;
+}
+
+group {
+   name: "e/widgets/entry";
+   min: 18 18;
+   parts {
+      part {
+         name: "entry";
+         description {
+            state: "default" 0.0;
+            image {
+               normal: "images/entry.png";
+               border: 2 2 2 2;
+            }
+         }
+      }
+      COMMON_FOCUS_PART();
+      part {
+         name: "e.swallow.text";
+         type: SWALLOW;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 4 4;
+               to: "entry";
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -5 -5;
+               to: "entry";
+            }
+         }
+      }
+   }
+   programs {
+      COMMON_FOCUS_PROGRAMS();
+   }
+}
+
+
+// Selection in background looked more interesting on this theme.
+group {
+   name: "e/widgets/entry/selection";
+   data {
+      item: "on_foreground" "0"; // 1=puts selection on foreground
+   }
+   parts {
+      part {
+         name: "selection";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            color: 255 101 132 128;
+         }
+      }
+   }
+}

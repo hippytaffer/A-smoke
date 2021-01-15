@@ -1,0 +1,1274 @@
+// Window borders are designed with simple thin lines and a monochrome
+// fill. The small animation in the window controls on focus and
+// unfocus requires two sets of button images to make the one-way
+// scrolling work.  I think there is a solution that uses a clipped
+// alignment but I was fussing with it for too long and ... this was
+// pretty easy in the grand scope of things.  The relatively large
+// resize handles at the lower corners are my preference and allow a
+// thin shaped border in the horizontal and vertical fill lines.
+
+// lazy, lazy
+#define BUTTON_DEF(NAME)                        \
+image: "buttons/"NAME".png" COMP;               \
+image: "buttons/"NAME"_active.png" COMP;        \
+image: "buttons/"NAME"-0.png" COMP;             \
+image: "buttons/"NAME"-1.png" COMP;             \
+image: "buttons/"NAME"-2.png" COMP;             \
+image: "buttons/"NAME"-3.png" COMP;             \
+image: "buttons/"NAME"-4.png" COMP;             \
+image: "buttons/"NAME"-5.png" COMP;             \
+image: "buttons/"NAME"-6.png" COMP;             \
+image: "buttons/"NAME"-7.png" COMP;             \
+image: "buttons/"NAME"-b0.png" COMP;            \
+image: "buttons/"NAME"-b1.png" COMP;            \
+image: "buttons/"NAME"-b2.png" COMP;            \
+image: "buttons/"NAME"-b3.png" COMP;            \
+image: "buttons/"NAME"-b4.png" COMP;            \
+image: "buttons/"NAME"-b5.png" COMP;            \
+image: "buttons/"NAME"-b6.png" COMP;            \
+image: "buttons/"NAME"-b7.png" COMP;
+
+images {
+   image: "images/smoke_t1.png" COMP;
+   image: "images/smoke_t2.png" COMP;
+   image: "images/smoke_t3.png" COMP;
+   image: "images/smoke_b1.png" COMP;
+   image: "images/smoke_b2.png" COMP;
+   image: "images/smoke_b2shaped.png" COMP;
+   image: "images/smoke_b3.png" COMP;
+   image: "images/smoke_b3noresize.png" COMP;
+   image: "images/smoke_b4.png" COMP;
+   image: "images/smoke_b4noresize.png" COMP;
+   image: "images/smoke_b5.png" COMP;
+   image: "images/smoke_b5shaped.png" COMP;
+   image: "images/smoke_b6.png" COMP;
+   image: "images/smoke_b6noresize.png" COMP;
+   image: "images/smoke_b7.png" COMP;
+   image: "images/smoke_b7noresize.png" COMP;
+   image: "images/smoke_b8.png" COMP;
+   image: "images/smoke_b8shaped.png" COMP;
+   image: "images/titlebar_overlay.png" COMP;
+   image: "images/titlebar_overlay_focus.png" COMP;
+   BUTTON_DEF("close");
+   BUTTON_DEF("minimize");
+   BUTTON_DEF("maximize");
+}
+
+#define BUTTON_PART(NAME,RELTO) \
+BUTTON_PART_ADV(NAME,0.0,0.0,-15,0,RELTO,0.0,1.0,-1,-1,RELTO)
+
+#define BUTTON_PART_ADV(NAME,REL1X,REL1Y,OFF1X,OFF1Y,REL1TO,REL2X,REL2Y,OFF2X,OFF2Y,REL2TO) \
+part {                                          \
+   name: NAME;                                  \
+   type: IMAGE;                                 \
+   mouse_events: 1;                             \
+   description {                                \
+      min: 15 15;                               \
+      max: 15 15;                               \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: REL1X REL1Y;                 \
+         offset: OFF1X OFF1Y;                   \
+         to: REL1TO;                            \
+      }                                         \
+      rel2 {                                    \
+         relative: REL2X REL2Y;                 \
+         offset: OFF2X OFF2Y;                   \
+         to: REL2TO;                            \
+      }                                         \
+      image {                                   \
+         normal: "buttons/"NAME".png";          \
+      }                                         \
+   }                                            \
+   description {                                \
+      state: "active" 0.0;                      \
+      inherit: "default" 0.0;                   \
+      image {                                   \
+         normal: "buttons/"NAME"_active.png";   \
+      }                                         \
+   }                                            \
+   description {                                \
+      state: "focus_out" 0.0;                   \
+      rel1 {                                    \
+         relative: REL1X REL1Y;                 \
+         offset: OFF1X OFF1Y;                   \
+         to: REL1TO;                            \
+      }                                         \
+      rel2 {                                    \
+         relative: REL2X REL2Y;                 \
+         offset: OFF2X OFF2Y;                   \
+         to: REL2TO;                            \
+      }                                         \
+      image {                                   \
+         normal: "buttons/"NAME"-7.png";        \
+         tween: "buttons/"NAME"-1.png";         \
+         tween: "buttons/"NAME"-2.png";         \
+         tween: "buttons/"NAME"-3.png";         \
+         tween: "buttons/"NAME"-4.png";         \
+         tween: "buttons/"NAME"-5.png";         \
+         tween: "buttons/"NAME"-6.png";         \
+      }                                         \
+   }                                            \
+   description {                                \
+      state: "focus_in" 0.0;                    \
+      rel1 {                                    \
+         relative: REL1X REL1Y;                 \
+         offset: OFF1X OFF1Y;                   \
+         to: REL1TO;                            \
+      }                                         \
+      rel2 {                                    \
+         relative: REL2X REL2Y;                 \
+         offset: OFF2X OFF2Y;                   \
+         to: REL2TO;                            \
+      }                                         \
+      image {                                   \
+         normal: "buttons/"NAME"-0.png";        \
+         tween: "buttons/"NAME"-b1.png";        \
+         tween: "buttons/"NAME"-b2.png";        \
+         tween: "buttons/"NAME"-b3.png";        \
+         tween: "buttons/"NAME"-b4.png";        \
+         tween: "buttons/"NAME"-b5.png";        \
+         tween: "buttons/"NAME"-b6.png";        \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "e.event."NAME;                        \
+   type: RECT;                                  \
+   repeat_events: 1;                            \
+   description {                                \
+      state: "default" 0.0;                     \
+      color: 0 0 0 0;                           \
+      rel1.to: NAME;                            \
+      rel2.to: NAME;                            \
+   }                                            \
+}
+
+// Each title bar button needs a consistent mouse-in/out transition.
+#define TB_BUTTON_PROG(NAME)                    \
+program {                                       \
+   name: NAME".active";                         \
+   signal: "mouse,in";                          \
+   source: NAME;                                \
+   action: STATE_SET "active" 0.0;              \
+   target: NAME;                                \
+   transition: LINEAR 0.1;                      \
+}                                               \
+program {                                       \
+   name: NAME".inactive";                       \
+   signal: "mouse,out";                         \
+   source: NAME;                                \
+   action: STATE_SET "default" 0.0;             \
+   target: NAME;                                \
+   transition: LINEAR 0.2;                      \
+}
+
+#define TB_LEFT_PART()                          \
+part {                                          \
+   name: "title_bar_left";                      \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      align: 0.0 0.0;                           \
+      aspect_preference: VERTICAL;              \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 0 0;                           \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 24 20;                         \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_t1.png";         \
+         border: 4 1 1 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "b1";                                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 0 0;                           \
+         to: "title_bar_left";                  \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 3 40;                          \
+         to: "title_bar_left";                  \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b1.png";         \
+         border: 1 1 0 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}
+
+#define TB_MIDDLE_PART()                                \
+part {                                                  \
+   name: "title_bar";                                   \
+   mouse_events: 0;                                     \
+   type: IMAGE;                                         \
+   description {                                        \
+      state: "default" 0.0;                             \
+      rel1 {                                            \
+         relative: 1.0 0.0;                             \
+         offset: 0 0;                                   \
+         to: "title_bar_left" ;                         \
+      }                                                 \
+      rel2 {                                            \
+         relative: 0.0 1.0;                             \
+         offset: -1 -1;                                 \
+         to: "title_bar_right";                         \
+      }                                                 \
+      image {                                           \
+         normal: "images/smoke_t2.png";                 \
+         border: 0 0 1 1;                               \
+      }                                                 \
+      fill {                                            \
+         smooth: 0;                                     \
+      }                                                 \
+   }                                                    \
+}                                                       \
+part {                                                  \
+   name: "titlebar_overlay";                            \
+   mouse_events: 0;                                     \
+   type: IMAGE;                                         \
+   description {                                        \
+      state: "default" 0.0;                             \
+      rel1 {                                            \
+         relative: 0.0 0.0;                             \
+         offset: 0 1;                                   \
+         to: "title_bar";                               \
+      }                                                 \
+      rel2 {                                            \
+         relative: 1.0 1.0;                             \
+         offset: -1 -2;                                 \
+         to: "title_bar";                               \
+      }                                                 \
+      image {                                           \
+         normal: "images/titlebar_overlay.png";         \
+         border: 3 3 0 0;                               \
+      }                                                 \
+      color: 255 255 255 80;                            \
+   }                                                    \
+   description {                                        \
+      state: "active" 0.0;                              \
+      inherit: "default" 0.0;                           \
+      color: 255 255 255 200;                           \
+   }                                                    \
+}                                                       \
+part {                                                  \
+   name: "overlay_tint";                                \
+   mouse_events: 0;                                     \
+   type: IMAGE;                                         \
+   description {                                        \
+      state: "default" 0.0;                             \
+      rel1.to: "titlebar_overlay";                      \
+      rel2.to: "titlebar_overlay";                      \
+      image {                                           \
+         normal: "images/titlebar_overlay_focus.png";   \
+      }                                                 \
+      color: 255 255 255 0;                             \
+   }                                                    \
+   description {                                        \
+      state: "active" 0.0;                              \
+      inherit: "default" 0.0;                           \
+      color: 255 255 255 24;                            \
+   }                                                    \
+}
+
+
+
+
+// The right part of the title bar needs to attach to one of the
+// title bar buttons so it can vary for each dialog type
+#define TB_RIGHT_PART(BUTTON_PART)              \
+part {                                          \
+   name: "title_bar_right";                     \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: -4 0;                          \
+         to_x: BUTTON_PART;                     \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 0.0;                     \
+         offset: -1 20;                         \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_t3.png";         \
+         border: 1 4 1 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "b1_r";                                \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -4 0;                          \
+         to: "title_bar_right";                 \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -1 40;                         \
+         to: "title_bar_right";                 \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b1.png";         \
+         border: 1 1 0 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}
+
+#define EVENT_PART(NAME,PART)                   \
+part {                                          \
+   name: NAME;                                  \
+   type: RECT;                                  \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1.to: PART;                            \
+      rel2.to: PART;                            \
+      color: 0 0 0 0;                           \
+   }                                            \
+}
+
+#define BL_RESIZE_CORNER(TYPE)                  \
+part {                                          \
+   name: "b3";                                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 0 -28;                         \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 3 -1;                          \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b3"TYPE".png";   \
+         border: 1 1 1 4;                       \
+      }                                         \
+      fill.smooth: 0;                           \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "b4";                                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: 0 -4;                          \
+         to: "b3";                              \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: 24 -1;                         \
+         to: "b3";                              \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b4"TYPE".png";   \
+         border: 0 1 1 1;                       \
+      }                                         \
+      fill.smooth: 0;                           \
+   }                                            \
+}
+
+#define CORNER_RESIZE_PARTS()                   \
+part {                                          \
+   name: "e.event.resize.bl";                   \
+   type: RECT;                                  \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1.to: "b3";                            \
+      rel2.to: "b4";                            \
+      color: 0 0 0 0;                           \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "e.event.resize.br";                   \
+   type: RECT;                                  \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 0 0;                           \
+         to_x: "b6";                            \
+         to_y: "b7";                            \
+      }                                         \
+      rel2.to: "b7";                            \
+      color: 0 0 0 0;                           \
+   }                                            \
+}
+
+#define BR_RESIZE_CORNER(TYPE)                  \
+part {                                          \
+   name: "b6";                                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: -24 -4;                        \
+         to: "b7";                              \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: -1 -1;                         \
+         to: "b7";                              \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b6"TYPE".png";   \
+         border: 1 0 1 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "b7";                                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -4 -28;                        \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -1 -1;                         \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b7"TYPE".png";   \
+         border: 1 1 1 4;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}
+
+#define SWALLOW_PARTS()                         \
+part {                                          \
+   name: "e.text.title";                        \
+   type: TEXT;                                  \
+   effect: NONE;                                \
+   mouse_events: 0;                             \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 9 10;                          \
+         to: "title_bar";                       \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 0.0;                     \
+         offset: -10 10;                        \
+         to_x: "title_bar";                     \
+      }                                         \
+      color: 0 0 0 128;                         \
+      color_class: "border_title";              \
+      text {                                    \
+         text: "";                              \
+         font: "Sans";                          \
+         size: 10;                              \
+         min: 0 1;                              \
+         align: 0.0 0.5;                        \
+         text_class: "title_bar";               \
+      }                                         \
+   }                                            \
+   description {                                \
+      state: "active" 0.0;                      \
+      inherit: "default" 0.0;                   \
+      color: 0 0 0 255;                         \
+   }                                            \
+}                                               \
+                                                \
+part {                                          \
+   name: "e.swallow.client";                    \
+   type: SWALLOW;                               \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: 0 0;                           \
+         to_x: "b1";                            \
+         to_y: "title_bar_left";                \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -5 -5;                         \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "e.swallow.icon";                      \
+   type: SWALLOW;                               \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 4 2;                           \
+         to: "title_bar_left";                  \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 20 -2;                         \
+         to_y: "title_bar_left";                \
+      }                                         \
+   }                                            \
+}
+
+#define BORDER_FILL(TYPE)                       \
+part {                                          \
+   name: "vborder_fill_left";                   \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 0 0;                           \
+         to: "b1";                              \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 0.0;                     \
+         offset: -1 -1;                         \
+         to: "b3";                              \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b2"TYPE".png";   \
+         border: 1 1 0 0;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "hborder_fill";                        \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 1.0 0.0;                     \
+         offset: 0 0;                           \
+         to: "b4";                              \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: -1 -1;                         \
+         to: "b6";                              \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b5"TYPE".png";   \
+         border: 0 0 1 1;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}                                               \
+part {                                          \
+   name: "vborder_fill_right";                  \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 1.0;                     \
+         offset: 0 0;                           \
+         to: "b1_r";                            \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 0.0;                     \
+         offset: -1 -1;                         \
+         to: "b7";                              \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_b8"TYPE".png";   \
+         border: 1 1 0 0;                       \
+      }                                         \
+      fill {                                    \
+         smooth: 0;                             \
+      }                                         \
+   }                                            \
+}
+
+
+/* FINALLY */
+
+group {
+   name: "e/widgets/border/default/border";
+   data {
+      // item: "shaped" "1";
+   }
+   parts {
+      part {
+         name: "whole";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 0 0;
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -1 -1;
+            }
+         }
+      }
+      TB_LEFT_PART();
+      TB_MIDDLE_PART();
+      TB_RIGHT_PART("minimize");
+      BORDER_FILL("");
+      BL_RESIZE_CORNER("");
+      BR_RESIZE_CORNER("");
+
+      // decoration parts
+
+      BUTTON_PART_ADV("close",
+                      1.0, 0.0, -19,  3, "whole",
+                      1.0, 0.0,  -5, 17, "whole");
+      BUTTON_PART("maximize","close");
+      BUTTON_PART("minimize","maximize");
+
+      SWALLOW_PARTS();
+
+      // window manager event parts
+      EVENT_PART("e.event.icon","e.swallow.icon");
+      EVENT_PART("e.event.titlebar","title_bar");
+      EVENT_PART("e.event.resize.l","vborder_fill_left");
+      EVENT_PART("e.event.resize.r","vborder_fill_right");
+      EVENT_PART("e.event.resize.b","hborder_fill");
+      CORNER_RESIZE_PARTS();
+   }
+
+   programs {
+      program {
+         name: "go_active_pre";
+         signal: "e,state,focused";
+         source: "e";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         after: "focus_buttons";
+         after: "go_active_title";
+      }
+      program {
+         name: "focus_buttons";
+         action: STATE_SET "focus_in" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.33;
+         after: "go_default_buttons";
+      }
+      program {
+         name: "go_active_title";
+         action: STATE_SET "active" 0.0;
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         target: "e.text.title";
+         transition: LINEAR 0.33;
+      }
+      program {
+         name: "go_default_buttons";
+         action: STATE_SET "default" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+      }
+      program {
+         name: "go_passive_pre";
+         signal: "e,state,unfocused";
+         source: "e";
+         action: STATE_SET "active" 0.0;
+         target: "e.text.title";
+         after: "go_passive";
+         after: "go_passive_title";
+      }
+      program {
+         name: "go_passive";
+         action: STATE_SET "focus_out" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.25;
+      }
+      program {
+         name: "go_passive_title";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         transition: LINEAR 0.33;
+      }
+
+      TB_BUTTON_PROG("close");
+      TB_BUTTON_PROG("maximize");
+      TB_BUTTON_PROG("minimize");
+   }
+}
+
+group {
+   name: "e/widgets/border/noresize/border";
+   data {
+      // item: "shaped" "1";
+   }
+   parts {
+      part {
+         name: "whole";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 0 0;
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -1 -1;
+            }
+         }
+      }
+      TB_LEFT_PART();
+      TB_MIDDLE_PART();
+      TB_RIGHT_PART("minimize");
+      BORDER_FILL("");
+      BL_RESIZE_CORNER("noresize");
+      BR_RESIZE_CORNER("noresize");
+
+      // decoration parts
+
+      BUTTON_PART_ADV("close",
+                      1.0, 0.0, -19,  3, "whole",
+                      1.0, 0.0,  -5, 17, "whole");
+      BUTTON_PART("maximize","close");
+      BUTTON_PART("minimize","maximize");
+
+      SWALLOW_PARTS();
+
+      // window manager event parts
+      EVENT_PART("e.event.icon","e.swallow.icon");
+      EVENT_PART("e.event.titlebar","title_bar");
+   }
+
+   programs {
+      program {
+         name: "go_active_pre";
+         signal: "e,state,focused";
+         source: "e";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         after: "focus_buttons";
+         after: "go_active_title";
+      }
+      program {
+         name: "focus_buttons";
+         action: STATE_SET "focus_in" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.33;
+         after: "go_default_buttons";
+      }
+      program {
+         name: "go_active_title";
+         action: STATE_SET "active" 0.0;
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         target: "e.text.title";
+         transition: LINEAR 0.33;
+      }
+      program {
+         name: "go_default_buttons";
+         action: STATE_SET "default" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+      }
+      program {
+         name: "go_passive_pre";
+         signal: "e,state,unfocused";
+         source: "e";
+         action: STATE_SET "active" 0.0;
+         target: "e.text.title";
+         after: "go_passive";
+         after: "go_passive_title";
+      }
+      program {
+         name: "go_passive";
+         action: STATE_SET "focus_out" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.25;
+      }
+      program {
+         name: "go_passive_title";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         transition: LINEAR 0.33;
+      }
+
+      TB_BUTTON_PROG("close");
+      TB_BUTTON_PROG("maximize");
+      TB_BUTTON_PROG("minimize");
+   }
+}
+
+
+
+group {
+   name: "e/widgets/border/shaped/border";
+   data {
+      item: "shaped" "1";
+   }
+   parts {
+      part {
+         name: "whole";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 0 0;
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -1 -1;
+            }
+            color: 0 0 0 0;
+         }
+      }
+      TB_LEFT_PART();
+      TB_MIDDLE_PART();
+      TB_RIGHT_PART("minimize");
+      BORDER_FILL("shaped");
+      BL_RESIZE_CORNER("");
+      BR_RESIZE_CORNER("");
+
+      // decoration parts
+
+      BUTTON_PART_ADV("close",
+                      1.0, 0.0, -19,  3, "whole",
+                      1.0, 0.0,  -5, 17, "whole");
+      BUTTON_PART("maximize","close");
+      BUTTON_PART("minimize","maximize");
+
+      SWALLOW_PARTS();
+
+      // window manager event parts
+      EVENT_PART("e.event.icon","e.swallow.icon");
+      EVENT_PART("e.event.titlebar","title_bar");
+      EVENT_PART("e.event.resize.l","vborder_fill_left");
+      EVENT_PART("e.event.resize.r","vborder_fill_right");
+      EVENT_PART("e.event.resize.b","hborder_fill");
+      CORNER_RESIZE_PARTS();
+   }
+
+   programs {
+      program {
+         name: "go_active_pre";
+         signal: "e,state,focused";
+         source: "e";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         after: "focus_buttons";
+         after: "go_active_title";
+      }
+      program {
+         name: "focus_buttons";
+         action: STATE_SET "focus_in" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.33;
+         after: "go_default_buttons";
+      }
+      program {
+         name: "go_active_title";
+         action: STATE_SET "active" 0.0;
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         target: "e.text.title";
+         transition: LINEAR 0.33;
+      }
+      program {
+         name: "go_default_buttons";
+         action: STATE_SET "default" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+      }
+      program {
+         name: "go_passive_pre";
+         signal: "e,state,unfocused";
+         source: "e";
+         action: STATE_SET "active" 0.0;
+         target: "e.text.title";
+         after: "go_passive";
+         after: "go_passive_title";
+      }
+      program {
+         name: "go_passive";
+         action: STATE_SET "focus_out" 0.0;
+         target: "minimize";
+         target: "maximize";
+         target: "close";
+         transition: LINEAR 0.25;
+      }
+      program {
+         name: "go_passive_title";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         transition: LINEAR 0.25;
+      }
+
+      TB_BUTTON_PROG("close");
+      TB_BUTTON_PROG("maximize");
+      TB_BUTTON_PROG("minimize");
+   }
+}
+
+
+group {
+   name: "e/widgets/border/dialog/border";
+   data {
+      // item: "shaped" "1";
+   }
+   parts {
+      part {
+         name: "whole";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 0 0;
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -1 -1;
+            }
+         }
+      }
+      TB_LEFT_PART();
+      TB_MIDDLE_PART();
+      TB_RIGHT_PART("close");
+      BORDER_FILL("");
+      BL_RESIZE_CORNER("");
+      BR_RESIZE_CORNER("");
+
+      // decoration parts
+
+      BUTTON_PART_ADV("close",
+                      1.0, 0.0, -19,  3, "whole",
+                      1.0, 0.0,  -5, 17, "whole");
+
+      SWALLOW_PARTS();
+
+      // window manager event parts
+      EVENT_PART("e.event.icon","e.swallow.icon");
+      EVENT_PART("e.event.titlebar","title_bar");
+      EVENT_PART("e.event.resize.l","vborder_fill_left");
+      EVENT_PART("e.event.resize.r","vborder_fill_right");
+      EVENT_PART("e.event.resize.b","hborder_fill");
+      CORNER_RESIZE_PARTS();
+   }
+
+   programs {
+      program {
+         name: "go_active_pre";
+         signal: "e,state,focused";
+         source: "e";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         after: "focus_buttons";
+         after: "go_active_title";
+      }
+      program {
+         name: "focus_buttons";
+         action: STATE_SET "focus_in" 0.0;
+         target: "close";
+         transition: LINEAR 0.33;
+         after: "go_default_buttons";
+      }
+      program {
+         name: "go_active_title";
+         action: STATE_SET "active" 0.0;
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         target: "e.text.title";
+         transition: LINEAR 0.33;
+      }
+      program {
+         name: "go_default_buttons";
+         action: STATE_SET "default" 0.0;
+         target: "close";
+      }
+      program {
+         name: "go_passive_pre";
+         signal: "e,state,unfocused";
+         source: "e";
+         action: STATE_SET "active" 0.0;
+         target: "e.text.title";
+         after: "go_passive";
+         after: "go_passive_title";
+      }
+      program {
+         name: "go_passive";
+         action: STATE_SET "focus_out" 0.0;
+         target: "close";
+         transition: LINEAR 0.25;
+      }
+      program {
+         name: "go_passive_title";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         transition: LINEAR 0.25;
+      }
+
+      TB_BUTTON_PROG("close");
+   }
+}
+
+
+group {
+   name: "e/widgets/border/noresize_dialog/border";
+   data {
+      // item: "shaped" "1";
+   }
+   parts {
+      part {
+         name: "whole";
+         type: RECT;
+         description {
+            state: "default" 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 0 0;
+            }
+            rel2 {
+               relative: 1.0 1.0;
+               offset: -1 -1;
+            }
+         }
+      }
+      TB_LEFT_PART();
+      TB_MIDDLE_PART();
+      TB_RIGHT_PART("close");
+      BORDER_FILL("");
+      BL_RESIZE_CORNER("noresize");
+      BR_RESIZE_CORNER("noresize");
+
+      // decoration parts
+
+      BUTTON_PART_ADV("close",
+                      1.0, 0.0, -19,  3, "whole",
+                      1.0, 0.0,  -5, 17, "whole");
+
+      SWALLOW_PARTS();
+
+      // window manager event parts
+      EVENT_PART("e.event.icon","e.swallow.icon");
+      EVENT_PART("e.event.titlebar","title_bar");
+   }
+
+   programs {
+      program {
+         name: "go_active_pre";
+         signal: "e,state,focused";
+         source: "e";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         after: "focus_buttons";
+         after: "go_active_title";
+      }
+      program {
+         name: "focus_buttons";
+         action: STATE_SET "focus_in" 0.0;
+         target: "close";
+         transition: LINEAR 0.33;
+         after: "go_default_buttons";
+      }
+      program {
+         name: "go_active_title";
+         action: STATE_SET "active" 0.0;
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         target: "e.text.title";
+         transition: LINEAR 0.33;
+      }
+      program {
+         name: "go_default_buttons";
+         action: STATE_SET "default" 0.0;
+         target: "close";
+      }
+      program {
+         name: "go_passive_pre";
+         signal: "e,state,unfocused";
+         source: "e";
+         action: STATE_SET "active" 0.0;
+         target: "e.text.title";
+         after: "go_passive";
+         after: "go_passive_title";
+      }
+      program {
+         name: "go_passive";
+         action: STATE_SET "focus_out" 0.0;
+         target: "close";
+         transition: LINEAR 0.25;
+      }
+      program {
+         name: "go_passive_title";
+         action: STATE_SET "default" 0.0;
+         target: "e.text.title";
+         target: "titlebar_overlay";
+         target: "overlay_tint";
+         transition: LINEAR 0.25;
+      }
+
+      TB_BUTTON_PROG("close");
+   }
+}
+
+
+// These are the small buttons on the window title bar pulldown.
+#define BORDER_BUTTON(TYPE)                                     \
+group {                                                         \
+   name: "e/widgets/border/default/"TYPE;                       \
+   parts {                                                      \
+      part {                                                    \
+         name: "button_bg";                                     \
+         type: RECT;                                            \
+         description {                                          \
+            state: "default" 0.0;                               \
+            align: 1.0 0.0;                                     \
+            aspect: 1.0 1.0;                                    \
+            aspect_preference: VERTICAL;                        \
+            color: 0 0 0 0;                                     \
+         }                                                      \
+      }                                                         \
+      part {                                                    \
+         name: "button_detail";                                 \
+         mouse_events: 0;                                       \
+         description {                                          \
+            state: "default" 0.0;                               \
+            max: 16 16;                                         \
+            rel1 {                                              \
+               offset: 2 2;                                     \
+               to: "button_bg";                                 \
+            }                                                   \
+            rel2 {                                              \
+               offset: -3 -3;                                   \
+               to: "button_bg";                                 \
+            }                                                   \
+            image {                                             \
+               normal: "images/e17_button_detail_"TYPE".png";   \
+            }                                                   \
+         }                                                      \
+      }                                                         \
+      part { /* a rect for window manager actions */            \
+         name: "e.event.button";                                \
+         type: RECT;                                            \
+         repeat_events: 1;                                      \
+         description {                                          \
+            state: "default" 0.0;                               \
+            color: 0 0 0 0;                                     \
+            rel1.to: "button_bg";                               \
+            rel2.to: "button_bg";                               \
+         }                                                      \
+      }                                                         \
+   }                                                            \
+}
+
+images {
+   image: "images/e17_button_detail_close.png" COMP;
+   image: "images/e17_button_detail_minimize.png" COMP;
+   image: "images/e17_button_detail_maximize.png" COMP;
+   image: "images/e17_button_detail_shade.png" COMP;
+   image: "images/e17_button_detail_stick.png" COMP;
+   image: "images/e17_button_detail_kill.png" COMP;
+   image: "images/e17_button_detail_locks.png" COMP;
+   image: "images/e17_button_detail_locks_user.png" COMP;
+   image: "images/e17_button_detail_locks_application.png" COMP;
+   image: "images/e17_button_detail_borderless.png" COMP;
+   image: "images/e17_button_detail_fullscreen.png" COMP;
+   image: "images/e17_button_detail_remember.png" COMP;
+   image: "images/e17_button_detail_skip_winlist.png" COMP;
+   image: "images/e17_button_detail_skip.png" COMP;
+   image: "images/e17_button_detail_skip_pager.png" COMP;
+   image: "images/e17_button_detail_sendto.png" COMP;
+   image: "images/e17_button_detail_stacking.png" COMP;
+   image: "images/e17_button_detail_stack_on_top.png" COMP;
+   image: "images/e17_button_detail_stack_normal.png" COMP;
+   image: "images/e17_button_detail_stack_below.png" COMP;
+   image: "images/e17_button_detail_properties.png" COMP;
+}
+
+BORDER_BUTTON("close")
+BORDER_BUTTON("minimize")
+BORDER_BUTTON("maximize")
+BORDER_BUTTON("shade")
+BORDER_BUTTON("stick")
+BORDER_BUTTON("kill")
+BORDER_BUTTON("locks")
+BORDER_BUTTON("locks_user")
+BORDER_BUTTON("locks_application")
+BORDER_BUTTON("borderless")
+BORDER_BUTTON("fullscreen")
+BORDER_BUTTON("remember")
+BORDER_BUTTON("skip_winlist")
+BORDER_BUTTON("skip")
+BORDER_BUTTON("skip_pager")
+BORDER_BUTTON("sendto")
+BORDER_BUTTON("stacking")
+BORDER_BUTTON("stack_on_top")
+BORDER_BUTTON("stack_normal")
+BORDER_BUTTON("stack_below")
+BORDER_BUTTON("properties")
