@@ -2,7 +2,6 @@ images {
    //~ image: "images/e17_mini_button_shadow2.png" COMP; / Unused
    image: "images/e17_fileman_thumb_bg.png" COMP;
    image: "images/fileman_sb_vtrough.png" COMP;
-
    image: "images/e17_button_detail_open.png" COMP;
    image: "images/e17_button_detail_paste.png" COMP;
    image: "images/e17_button_detail_copy.png" COMP;

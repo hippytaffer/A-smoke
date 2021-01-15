@@ -19,14 +19,11 @@ image: "buttons/"NAME"-4.png" COMP;             \
 image: "buttons/"NAME"-5.png" COMP;             \
 image: "buttons/"NAME"-6.png" COMP;             \
 image: "buttons/"NAME"-7.png" COMP;             \
-image: "buttons/"NAME"-b0.png" COMP;            \
 image: "buttons/"NAME"-b1.png" COMP;            \
 image: "buttons/"NAME"-b2.png" COMP;            \
 image: "buttons/"NAME"-b3.png" COMP;            \
 image: "buttons/"NAME"-b4.png" COMP;            \
 image: "buttons/"NAME"-b5.png" COMP;            \
-image: "buttons/"NAME"-b6.png" COMP;            \
-image: "buttons/"NAME"-b7.png" COMP;
 
 images {
    image: "images/smoke_t1.png" COMP;
@@ -122,7 +119,6 @@ part {                                          \
          to: REL2TO;                            \
       }                                         \
       image {                                   \
-         normal: "buttons/"NAME"-0.png";        \
          tween: "buttons/"NAME"-b1.png";        \
          tween: "buttons/"NAME"-b2.png";        \
          tween: "buttons/"NAME"-b3.png";        \
