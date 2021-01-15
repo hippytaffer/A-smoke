@@ -1,0 +1,241 @@
+images {
+   image: "images/winlist_item_bg.png" COMP;
+}
+
+styles {
+   style {
+      name: "about_style";
+      base: "font=Sans font_size=10 text_class=tb_plain align=center color=#000 style=shadow shadow_color=#ffffff80 wrap=word";
+
+      tag: "br" "\n";
+      tag: "hilight" "+ font=Sans-Bold text_class=tb_light style=glow color=#fff glow2_color=#fe87 glow_color=#fa14";
+      tag: "title" "+ font_size=12 font=Sans-Bold text_class=tb_big style=soft_shadow color=#fff shadow_color=#00000020";
+      tag: "/title" "- \n \n";
+   }
+}
+
+#define ABOUT_BG(NAME)                          \
+part {                                          \
+   name: NAME;                                  \
+   mouse_events: 0;                             \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         to: "e.textblock."NAME;                \
+         offset: -7 -7;                         \
+      }                                         \
+      rel2 {                                    \
+         to: "e.textblock."NAME;                \
+         offset: 6 6;                           \
+      }                                         \
+      image {                                   \
+         normal: "images/winlist_item_bg.png";  \
+         border: 5 5 2 2;                       \
+      }                                         \
+   }                                            \
+}
+//SIMPLE_FRAME(NAME"_border",NAME)
+
+group {
+   name: "e/widgets/about/main";
+   parts {
+      DIALOG_PANEL_BASE();
+      ABOUT_BG("about");
+      ABOUT_BG("authors");
+      part {
+         name: "e.textblock.about";
+         type: TEXTBLOCK;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            min: 200 400;
+            rel1 {
+               to_y: "e.text.version";
+               relative: 0.0 1.0;
+               offset: 16 8;
+            }
+            rel2 {
+               to_x: "logo";
+               to_y: "button";
+               relative: 0.0 0.0;
+               offset: -9 -22;
+            }
+            text {
+               style: "about_style";
+               min: 0 1;
+            }
+         }
+      }
+      part {
+         name: "e.textblock.authors";
+         type: TEXTBLOCK;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            min: 200 400;
+            rel1 {
+               to_y: "e.text.version";
+               to_x: "logo";
+               relative: 1.0 1.0;
+               offset: 8 8;
+            }
+            rel2 {
+               to_y: "button";
+               relative: 1.0 0.0;
+               offset: -17 -22;
+            }
+            text {
+               style: "about_style";
+               min: 1 1;
+            }
+         }
+      }
+      part {
+         name: "e.text.title";
+         type: TEXT;
+         effect: SOFT_SHADOW;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            fixed: 0 1;
+            align: 0.5 0.0;
+            rel1 {
+               relative: 0.0 0.0;
+               offset: 6 6;
+            }
+            rel2 {
+               relative: 1.0 0.0;
+               offset: -7 6;
+            }
+            color: 255 255 255 255;
+            color3: 0 0 0 42;
+            color_class: "about_title";
+            text {
+               text: "Enlightenment";
+               font: "Sans:style=Bold,Sans-Bold";
+               size: 16;
+               min: 1 1;
+               align: 0.5 0.5;
+               text_class: "about_title";
+            }
+         }
+      }
+      part {
+         name: "e.text.version";
+         type: TEXT;
+         effect: SOFT_SHADOW;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            fixed: 0 1;
+            align: 0.5 0.0;
+            rel1 {
+               to: "e.text.title";
+               relative: 0.0 1.0;
+               offset: 6 2;
+            }
+            rel2 {
+               to: "e.text.title";
+               relative: 1.0 1.0;
+               offset: -7 2;
+            }
+            color: 255 255 255 255;
+            color3: 0 0 0 32;
+            color_class: "about_version";
+            text {
+               text: "0.17.0.000";
+               font: "Sans:style=Bold";
+               size: 12;
+               min: 1 1;
+               align: 0.5 0.5;
+               text_class: "about_version";
+            }
+         }
+      }
+      part {
+         name: "logo";
+         type: IMAGE;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            min: 63 63;
+            max: 63 63;
+            align: 0.5 0.5;
+            fixed: 1 1;
+            rel1 {
+               relative: 0.5 0.5;
+               offset: 0 0;
+               to_y: "e.textblock.about";
+            }
+            rel2 {
+               relative: 0.5 0.5;
+               offset: 0 0;
+               to_y: "e.textblock.about";
+            }
+            image {
+               normal: "images/e17_logo_gray.png";
+            }
+         }
+      }
+      part {
+         name: "logo_overlay";
+         type: IMAGE;
+         mouse_events: 0;
+         description {
+            state: "default" 0.0;
+            rel1.to: "logo";
+            rel2.to: "logo";
+            image {
+               normal: "images/e17_logo.png";
+            }
+            color: 255 255 255 255;
+         }
+         description {
+            state: "invisible" 0.0;
+            inherit: "default" 0.0;
+            color: 255 255 255 0;
+         }
+      }
+      part {
+         name: "logo_events";
+         type: RECT;
+         mouse_events: 1;
+         description {
+            rel1.to: "logo";
+            rel2.to: "logo";
+            color: 0 0 0 0;
+         }
+      }
+      WATERMARK();
+      CENTERED_OK_BUTTON("button");
+
+   }
+   programs {
+      CENTERED_OK_PROGRAMS("button");
+      program {
+         name: "init";
+         signal: "show";
+         source: "";
+         action: STATE_SET "invisible" 0.0;
+         target: "logo_overlay";
+         transition: LINEAR 4.0;
+         after: "pulse_1";
+      }
+      program {
+         name: "pulse_1";
+         in: 1.0 0.0;
+         source: "logo_events";
+         action: STATE_SET "default" 0.0;
+         target: "logo_overlay";
+         transition: ACCELERATE 0.3;
+         after: "pulse_2";
+      }
+      program {
+         name: "pulse_2";
+         action: STATE_SET "invisible" 0.0;
+         target: "logo_overlay";
+         transition: DECELERATE 0.5;
+         after: "pulse_1";
+      }
+   }
+}

@@ -1,0 +1,75 @@
+images {
+   image: "images/smoke_bg.png" LOSSY 70;
+   image: "images/logo-es.png" COMP;
+   image: "images/bg_vgrad.png" COMP;
+}
+
+#define BG_UNDERLAY()                           \
+part {                                          \
+   name: "underlay";                            \
+   mouse_events: 0;                             \
+   description { state: "default" 0.0;          \
+      image.normal: "images/bg_vgrad.png";      \
+      fill {                                    \
+         smooth: 0;                             \
+         size {                                 \
+            relative: 0 1.0;                    \
+            offset: 36 0;                       \
+         }                                      \
+      }                                         \
+   }                                            \
+}
+
+#define BG_LOGO()                               \
+part {                                          \
+   name: "logo";                                \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      align: 0.0 1.0;                           \
+      aspect: 1.0 1.0;                          \
+      rel1 {                                    \
+         relative: 0.0 0.50;                    \
+         offset: 0 0;                           \
+      }                                         \
+      rel2 {                                    \
+         relative: 0.50 1.0;                    \
+         offset: -1 -1;                         \
+      }                                         \
+      image {                                   \
+         normal: "images/logo-es.png";          \
+      }                                         \
+      color: 255 255 255 200;                   \
+   }                                            \
+}
+
+#define BG_OVERLAY()                            \
+part {                                          \
+   name: "background";                          \
+   mouse_events: 0;                             \
+   type: IMAGE;                                 \
+   description {                                \
+      state: "default" 0.0;                     \
+      rel1 {                                    \
+         relative: 0.0 0.0;                     \
+         offset: 0 0;                           \
+      }                                         \
+      rel2 {                                    \
+         relative: 1.0 1.0;                     \
+         offset: -1 -1;                         \
+      }                                         \
+      image {                                   \
+         normal: "images/smoke_bg.png";         \
+      }                                         \
+      color: 255 255 255 120;                   \
+   }                                            \
+}
+
+group { name: "e/desktop/background";
+   parts {
+      BG_UNDERLAY();
+      BG_LOGO();
+      BG_OVERLAY();
+   }
+}
