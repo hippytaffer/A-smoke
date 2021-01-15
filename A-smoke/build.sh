@@ -1,2 +1,2 @@
 #!/bin/sh
-edje_cc $@ -id . -fd . default.edc -o A-smoke.edj
+edje_cc $@ -id . -fd . smoke.edc -o A-smoke.edj
