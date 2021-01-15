@@ -1,8 +1,0 @@
-group {
-   name: "e/desklock/background";
-   parts {
-      BG_UNDERLAY();
-//      BG_LOGO();
-      BG_OVERLAY();
-   }
-}

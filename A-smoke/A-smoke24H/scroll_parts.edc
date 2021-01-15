@@ -4,10 +4,10 @@ images {
    image: "images/sb_down.png" COMP;
    image: "images/sb_up_active.png" COMP;
    image: "images/sb_up.png" COMP;
-   image: "images/sbar_bg.png" COMP;
+   //~ image: "images/sbar_bg.png" COMP; / Unused
    image: "images/sb_barv.png" COMP;
    image: "images/sb_barv_active.png" COMP;
-   image: "images/sb_barh.png" COMP;
+   //~ image: "images/sb_barh.png" COMP;
    image: "images/sb_port.png" COMP;
    image: "images/sb_vtrough.png" COMP;
 }

@@ -16,12 +16,12 @@
 #ifndef HOURS24
 #define HOUR10_CELLS "clock/clock_hour_10.png"
 #else
-#define HOUR10_CELLS "clock/clock_24hour_10.png"
+//~ #define HOUR10_CELLS "clock/clock_24hour_10.png" / Unused
 #endif
 
 images {
    image: "clock/clock_hour_10.png" COMP;
-   image: "clock/clock_24hour_10.png" COMP;
+   //~ image: "clock/clock_24hour_10.png" COMP; / Unused
    image: "clock/clock_hour_1.png" COMP;
    image: "clock/clock_min_10.png" COMP;
    image: "clock/clock_min_1.png" COMP;
